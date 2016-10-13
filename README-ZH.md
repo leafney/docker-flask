@@ -1,4 +1,5 @@
-[Docker Hub](https://hub.docker.com/r/leafney/docker-flask/)
+* [GitHub](https://github.com/Leafney/docker-flask)  
+* [Docker Hub](https://hub.docker.com/r/leafney/docker-flask/)
 
 #### docker-flask
 
@@ -33,7 +34,7 @@ $ docekr exec -it flask /bin/sh
 ###### 退出该命令窗口
 
 ```
-$ Ctrl+P+Q
+$ Ctrl-p + Ctrl-q
 ```
 
 ##### 启动一个后台运行容器并挂载目录到容器内

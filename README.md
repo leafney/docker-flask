@@ -1,5 +1,5 @@
-[中文说明](/README-ZH.md)
-[Docker Hub](https://hub.docker.com/r/leafney/docker-flask/)
+* [GitHub](https://github.com/Leafney/docker-flask)  
+* [Docker Hub](https://hub.docker.com/r/leafney/docker-flask/)
 
 #### docker-flask
 
@@ -34,7 +34,7 @@ $ docekr exec -it flask /bin/sh
 ###### Quit the Bash :
 
 ```
-$ Ctrl+P+Q
+$ Ctrl-p + Ctrl-q
 ```
 
 ##### Start a background container and mount the directory to the container
