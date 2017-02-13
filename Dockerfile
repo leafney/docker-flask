@@ -1,31 +1,29 @@
-From alpine:latest
-MAINTAINER leafney "babycoolzx@163.com"
+From alpine:3.5
+MAINTAINER leafney "babycoolzx@126.com"
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/v3.4/main" >> /etc/apk/repositories && \
-	echo "http://dl-4.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories
+RUN echo "http://dl-4.alpinelinux.org/alpine/v3.5/main" >> /etc/apk/repositories && \
+	echo "http://dl-4.alpinelinux.org/alpine/v3.5/community" >> /etc/apk/repositories
 
 # application folder
-ENV APP_DIR /webapp
+ENV APP_DIR /app
 
-# update source 
-RUN apk upgrade && \
-	apk update && \
-	apk add python py-pip py-flask py-gunicorn nginx supervisor && \
-	mkdir -p /run/nginx && \
+# update source
+RUN apk update && \
+	apk add python py-pip supervisor && \
+	pip install --upgrade pip && \
+	pip install Flask && \
+	pip install gunicorn && \
 	mkdir -p ${APP_DIR}/web && \
 	mkdir -p ${APP_DIR}/conf && \
-	mkdir -p ${APP_DIR}/log && \
+	mkdir -p ${APP_DIR}/logs && \
 	rm -rf /var/cache/apk/* && \
-	echo "files = /webapp/conf/*.ini" >> /etc/supervisord.conf
+	echo "files = ${APP_DIR}/conf/*.ini" >> /etc/supervisord.conf
 
 # copy config files
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./web ${APP_DIR}/web
-COPY ./gunicorn.conf ${APP_DIR}/conf/gunicorn.conf
-COPY ./supervisor.ini ${APP_DIR}/conf/supervisor.ini
+COPY ./app ${APP_DIR}
 
-# VOLUME [${APP_DIR}]
+VOLUME [${APP_DIR}]
 
-EXPOSE 80
+EXPOSE 5000
 
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

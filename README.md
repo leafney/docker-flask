@@ -1,51 +1,74 @@
+#### docker-flask
+
 * [GitHub](https://github.com/Leafney/docker-flask)  
 * [Docker Hub](https://hub.docker.com/r/leafney/docker-flask/)
 
-#### docker-flask
+Alpine + Docker + Flask + Gunicorn + Supervisor
 
-Alpine + Docker + Flask + Gunicorn + Supervisor + Nginx
+The image by Gunicorn deployment Flask under alpine system application, and through the Supervisor management example of a background process.
 
-The image by Gunicorn and Nginx deployment Flask under alpine system application, and through the Supervisor management example of a background process.
+Base image is `alpine:3.5`
 
-Base image is `alpine:latest (v3.4)`
-
-#### To build image
+#### Get image from Docker Hub
 
 ```
-$ docker build -t="leafney/docker-flask" .
+$ docker pull leafney/docker-flask
 ```
 
-#### To run 
-
-##### Start a default background running container
+#### Start a default background running container
 
 ```
-$ docker run -it --name flask -d -p 5000:80 leafney/docker-flask
+$ docker run -it --name flask -d -p 5000:5000 leafney/docker-flask
 ```
 
-whitch run the default flask web site file `web/app.py`.
+you can see it in browser by `http://yourhostip:5000` .
 
-###### Start a new Bash login the background running container
-
-```
-$ docekr exec -it flask /bin/sh
-```
-
-###### Quit the Bash :
-
-```
-$ Ctrl-p + Ctrl-q
-```
+***
 
 ##### Start a background container and mount the directory to the container
 
-Mounted under the host site directory `/home/tiger/flaskweb` into the container `/webapp/web`;
-Mounted under the host site directory `/home/tiger/flasklogs` into the container `/webapp/log`;
+Mounted under the host directory `/home/tiger/flaskweb` into the container `/web`:
 
 ```
-$ docker run -it --name flask -d -p 5000:80 -v /home/tiger/flaskweb:/webapp/web -v /home/tiger/flasklogs:/webapp/log leafney/docker-flask
+$ docker run --name flask -v /home/tiger/flaskweb:/app -d -p 5000:5000 leafney/docker-flask
 ```
 
-After using `-v` mount, new mounted directory will hide the original directory in the container.
+The current directory under the `/app` folder to mount the directory `flaskweb`:
 
-We can edit flask web files in the host site directory  `/home/tiger/flaskweb` then run bash `$ docker restart flask` to view the modified effect.
+```
+- flaskweb
+	- conf
+		- supervisor_flask.ini
+	- logs
+	- web
+		- app.py
+```
+
+File `supervisor_flask.ini` is used to set the supervisor boot parameters and Gunicorn settings.
+
+Put your project files in the `web` directory,`app.py` is the startup file for your Flask project. And need to set up in the `app.py` monitoring open IP.
+
+```
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+```
+
+And then through the command `$ docker restart flask` to restart container.
+
+***
+
+#### Installing additional flask packages
+
+The base dependency package is only installed in the Flask container. In the actual project, you also need to install other dependencies. You can install dependencies in the running Flask container by following commands:
+
+```
+$ docker exec CONTAINER_ID/NAME /bin/sh -c "pip install package-name"
+```
+
+For example, the project uses the mongodb database, you can install the following commands:
+
+```
+$ docker exec flask /bin/sh -c "pip install Flask-PyMongo"
+```
+
+After the installation is completed through the command `$ docker restart flask` to restart container.
