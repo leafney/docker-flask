@@ -22,7 +22,7 @@ RUN apk update && \
 # copy config files
 COPY ./app ${APP_DIR}
 
-VOLUME [${APP_DIR}]
+VOLUME ["${APP_DIR}"]
 
 EXPOSE 5000
 
