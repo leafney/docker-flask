@@ -1,18 +1,18 @@
-From alpine:3.5
+From alpine:3.7
 MAINTAINER leafney "babycoolzx@126.com"
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/v3.5/main" >> /etc/apk/repositories && \
-	echo "http://dl-4.alpinelinux.org/alpine/v3.5/community" >> /etc/apk/repositories
+# In China used
+# RUN echo "http://dl-4.alpinelinux.org/alpine/v3.7/main" >> /etc/apk/repositories && \
+# 	echo "http://dl-4.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories
 
 # application folder
 ENV APP_DIR /app
 
 # update source
 RUN apk update && \
-	apk add python py-pip supervisor && \
-	pip install --upgrade pip && \
-	pip install Flask && \
-	pip install gunicorn && \
+	apk add python python3 python3-dev supervisor && \
+	pip3 install --upgrade pip && \
+	pip3 install flask gunicorn && \
 	mkdir -p ${APP_DIR}/web && \
 	mkdir -p ${APP_DIR}/conf && \
 	mkdir -p ${APP_DIR}/logs && \
